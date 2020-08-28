@@ -161,7 +161,7 @@ async def exec_command(ctx, *, arg1):
         sys.stdout = old_stdout
         embed=discord.Embed(title=f'Execute', color=0x7289da)
         embed.set_author(name="COVID-19 Tracker")
-        embed.add_field(name="Code", value=f'```\n{str(arg1)}\n```', inline=False)
+        embed.add_field(name="Code", value=f'```py\n{str(arg1)}\n```', inline=False)
         embed.add_field(name="Output", value=f'```\n{str(output)}\n```', inline=False)
         await ctx.send(embed = embed)
     else:
