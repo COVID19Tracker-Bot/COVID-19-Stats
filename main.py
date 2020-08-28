@@ -92,6 +92,8 @@ async def prefixjson(ctx):
     if str(ctx.message.author.id) == '438298127225847810':
         with open('prefix.json', 'r') as f:
             prefixes = json.load(f)
+    if len(prefixes) < 1000:
+        await ctx.send(f'```\n{prefixes}\n```')
     for chunk in chunks(prefixes, 1000):
         await ctx.send(f'```\n{chunk}\n```')
     else:
