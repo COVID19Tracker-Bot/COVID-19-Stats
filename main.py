@@ -71,6 +71,26 @@ async def on_guild_remove(guild):
 async def source(ctx):
     await ctx.send('https://gist.github.com/YouTubeATP/6d35c88c44f48ab34cc1b85cfd2e1023')
 
+@bot.command(name='get_guild')
+async def getguildcommand(ctx, arg1):
+    if str(ctx.message.author.id) == '438298127225847810':
+        guild = bot.get_guild(int(arg1))
+        if guild not None:
+            await ctx.send(f'Guild name: {str(guild.name)}\nGuild owner: {str(guild.owner)}')
+        else:
+            await ctx.send('Invalid guild ID!')
+    else:
+        await ctx.send("Sorry, but you don't have permission to do that.")
+
+@bot.command()
+async def prefixjson(ctx):
+    if str(ctx.message.author.id) == '438298127225847810':
+        with open('prefix.json', 'r') as f:
+            prefixes = json.load(f)
+        await ctx.send(f'```\n{prefixes}\n```')
+    else:
+        await ctx.send("Sorry, but you don't have permission to do that.")
+
 @bot.command(aliases = ['changeprefix'])
 async def cprefix(ctx, arg1):
     if not await has_permissions(manage_guild=True).predicate(ctx):
