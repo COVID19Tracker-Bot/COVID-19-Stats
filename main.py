@@ -32,8 +32,16 @@ async def on_message(message):
     if bot.user in message.mentions:
         with open('prefix.json', 'r') as f:
             prefixes = json.load(f)
-        
-        await message.channel.send(f'My prefix is: `{str(prefixes[str(message.guild.id)])}`')
+        try:
+            await message.channel.send(f'My prefix is: `{str(prefixes[str(message.guild.id)])}`')
+        except KeyError:
+            prefixes[str(message.guild.id)] = 'c!'
+            with open('prefix.json', 'w') as f:
+                json.dump(prefixes, f, indent=4)
+            with open('prefix.json', 'r') as f:
+                prefixes = json.load(f)
+            await message.channel.send(f'My prefix is: `{str(prefixes[str(message.guild.id)])}`')
+            
     await bot.process_commands(message)
 
 @bot.event
@@ -153,6 +161,7 @@ async def cprefix_error(ctx, error):
 @bot.command(name='exec')
 async def exec_command(ctx, *, arg1):
     if str(ctx.message.author.id) == '438298127225847810':
+        arg1 = arg1[]
         old_stdout = sys.stdout
         new_stdout = io.StringIO()
         sys.stdout = new_stdout
