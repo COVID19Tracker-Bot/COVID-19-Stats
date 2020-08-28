@@ -92,12 +92,12 @@ async def prefixjson(ctx):
     if str(ctx.message.author.id) == '438298127225847810':
         with open('prefix.json', 'r') as f:
             prefixes = json.load(f)
-            print(type(prefix))
+            prefix = json.dumps(f)
         try:
-            for chunk in chunks(prefic, 1000):
+            for chunk in chunks(prefix, 1000):
                 await ctx.send(f'```\n{chunk}\n```')
         except TypeError:
-            await ctx.send(f'```\n{prefixes}\n```')
+            await ctx.send(f'```\n{prefix}\n```')
     else:
         await ctx.send("Sorry, but you don't have permission to do that.")
 
@@ -621,4 +621,4 @@ async def c19hkcd(ctx, arg1 = None):
         embed.add_field(name="Case status", value=str(data3[0]['Confirmed/probable']), inline=True)
         await ctx.send(embed = embed)
 
-bot.run('NzQ0ODQxMDcwNjIxMzYwMTY5.XzpFTQ.3m992KrYem1vUSkqxrwLrr3dMdkgut')
+bot.run('NzQ0ODQxMDcwNjIxMzYwMTY5.XzpFTQ.BhwuXjup7slT7hac0pMQYyofEEs')
