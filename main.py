@@ -620,4 +620,4 @@ async def c19hkcd(ctx, arg1 = None):
         embed.add_field(name="Case status", value=str(data3[0]['Confirmed/probable']), inline=True)
         await ctx.send(embed = embed)
 
-bot.run('NzQ0ODQxMDcwNjIxMzYwMTY5.XzpFTQ.SUssHAcwE4JG2y72NNt2YJ7fSDY')
+bot.run('NzQ0ODQxMDcwNjIxMzYwMTY5.XzpFTQ.3m992KrYem1vUSkqxrwLrr3dMdk')
