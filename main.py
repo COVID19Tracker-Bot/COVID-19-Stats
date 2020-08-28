@@ -114,6 +114,14 @@ async def cprefixsu_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send("Missing Required Argument!")
 
+@bot.command()
+async def ping(ctx):
+    await ctx.send(f':ping_pong: Pong! The latency is **{round(bot.latency * 1000)}ms**.')
+
+@bot.command()
+async def pong(ctx):
+    await ctx.send(f':ping_pong: Ping! The latency is **{round(bot.latency * 1000)}ms**.')
+
 @bot.command(aliases = ['changeprefix'])
 async def cprefix(ctx, arg1):
     if not await has_permissions(manage_guild=True).predicate(ctx):
@@ -167,6 +175,11 @@ async def help(ctx):
         prefixes = json.load(f)
         prefix = prefixes[str(ctx.guild.id)]
     await ctx.send(f'''**COVID-19 Hong Kong Stats Discord Bot - Help**
+
+`{str(prefix)}ping`
+Returns the bot's latency in milliseconds.
+
+
 `{str(prefix)}c19hkd [DD/MM/YYYY (optional)]`
 Sends data regarding Hong Kong's COVID-19 status as of a date. If no date is inserted, the bot will return data as of yesterday.
 
