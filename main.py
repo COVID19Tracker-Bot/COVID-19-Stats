@@ -16,8 +16,13 @@ def get_prefix(bot, message):
     with open('prefix.json', 'r') as f:
         prefixes = json.load(f)
 
-    return prefixes[str(message.guild.id)]
-    prefix = prefixes[str(message.guild.id)]
+    try:
+        return prefixes[str(message.guild.id)]
+        prefix = prefixes[str(message.guild.id)]
+    except KeyError:
+        prefixes[str(message.guild.id)] = 'c!'
+        return prefixes[str(message.guild.id)]
+        prefix = prefixes[str(message.guild.id)]
 
 bot = commands.Bot(command_prefix = get_prefix)
 bot.remove_command('help')
@@ -48,6 +53,8 @@ async def on_guild_join(guild):
     with open('prefix.json', 'w') as f:
         json.dump(prefixes, f, indent=4)
 
+    print(f'I have been invited to {str(guild.name)}! Owner: {str(guild.owner)}')
+
 @bot.event
 async def on_guild_remove(guild):
     with open('prefix.json', 'r') as f:
@@ -57,6 +64,8 @@ async def on_guild_remove(guild):
 
     with open('prefix.json', 'w') as f:
         json.dump(prefixes, f, indent=4)
+
+    print(f'I have been removed from {str(guild.name)}. (Owner: {str(guild.owner)}')
 
 @bot.command(aliases = ['sourcecode'])
 async def source(ctx):
@@ -125,12 +134,12 @@ Note that [caseno] is **required**.
 `{str(prefix)}c19hklist [dataType] [operator/ sortType] [val1] [val2]`
 Returns a list regarding multiple days of Hong Kong's COVID-19 status, given the parameters.
 See images below for details.
-Note: this command does not show properly for mobile clients.
+Note: this command does not show properly for some clients.
 
 `{str(prefix)}c19hkclist [dataType] [operator/ sortType] [val1] [val2]`
 Returns a list regarding multiple Hong Kong's COVID-19 cases, given the parameters.
 See images below for details.
-Note: this command does not show properly for mobile clients.
+Note: this command does not show properly for some clients.
 
 `{str(prefix)}cprefix [newprefix]`
 Changes the bot's prefix to the one the user specifies. Requires the user to have the **Manage Server** permission.
