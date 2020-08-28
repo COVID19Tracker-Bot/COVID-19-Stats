@@ -179,7 +179,6 @@ async def help(ctx):
 `{str(prefix)}ping`
 Returns the bot's latency in milliseconds.
 
-
 `{str(prefix)}c19hkd [DD/MM/YYYY (optional)]`
 Sends data regarding Hong Kong's COVID-19 status as of a date. If no date is inserted, the bot will return data as of yesterday.
 
