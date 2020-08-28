@@ -91,6 +91,29 @@ async def prefixjson(ctx):
     else:
         await ctx.send("Sorry, but you don't have permission to do that.")
 
+@bot.command()
+async def cprefixsu(ctx, arg1, arg2):
+    if str(ctx.message.author.id) == '438298127225847810':
+        with open('prefix.json', 'r') as f:
+            prefixes = json.load(f)
+        
+        prefixes[str(arg1)] = str(arg2)
+
+        with open('prefix.json', 'w') as f:
+            json.dump(prefixes, f, indent=4)
+        
+        with open('prefix.json', 'r') as f:
+            prefixes = json.load(f)
+            prefix = prefixes[str(ctx.guild.id)]
+
+        await ctx.send(f'prefixes[{str(arg1)}] is now {str(arg2)}. Verify using `{prefix}prefixjson`.')
+    else:
+        await ctx.send("Sorry, but you don't have permission to do that.")
+@cprefixsu.error
+async def cprefixsu_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send("Missing Required Argument!")
+
 @bot.command(aliases = ['changeprefix'])
 async def cprefix(ctx, arg1):
     if not await has_permissions(manage_guild=True).predicate(ctx):
