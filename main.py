@@ -41,7 +41,6 @@ async def on_message(message):
             with open('prefix.json', 'r') as f:
                 prefixes = json.load(f)
             await message.channel.send(f'My prefix is: `{str(prefixes[str(message.guild.id)])}`')
-            
     await bot.process_commands(message)
 
 @bot.event
