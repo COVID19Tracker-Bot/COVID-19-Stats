@@ -92,8 +92,9 @@ async def prefixjson(ctx):
     if str(ctx.message.author.id) == '438298127225847810':
         with open('prefix.json', 'r') as f:
             prefixes = json.load(f)
+            print(type(prefix))
         try:
-            for chunk in chunks(prefixes, 1000):
+            for chunk in chunks(prefic, 1000):
                 await ctx.send(f'```\n{chunk}\n```')
         except TypeError:
             await ctx.send(f'```\n{prefixes}\n```')
@@ -620,4 +621,4 @@ async def c19hkcd(ctx, arg1 = None):
         embed.add_field(name="Case status", value=str(data3[0]['Confirmed/probable']), inline=True)
         await ctx.send(embed = embed)
 
-bot.run('NzQ0ODQxMDcwNjIxMzYwMTY5.XzpFTQ.3m992KrYem1vUSkqxrwLrr3dMdk')
+bot.run('NzQ0ODQxMDcwNjIxMzYwMTY5.XzpFTQ.3m992KrYem1vUSkqxrwLrr3dMdkgut')
