@@ -160,6 +160,8 @@ async def cprefix_error(ctx, error):
 @bot.command(name='exec')
 async def exec_command(ctx, *, arg1):
     if str(ctx.message.author.id) == '438298127225847810':
+        arg1 = arg1[7:-5]
+        print(arg1)
         old_stdout = sys.stdout
         new_stdout = io.StringIO()
         sys.stdout = new_stdout
