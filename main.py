@@ -82,12 +82,18 @@ async def getguildcommand(ctx, arg1):
     else:
         await ctx.send("Sorry, but you don't have permission to do that.")
 
+def chunks(s, n):
+    """Produce `n`-character chunks from `s`."""
+    for start in range(0, len(s), n):
+        yield s[start:start+n]
+
 @bot.command()
 async def prefixjson(ctx):
     if str(ctx.message.author.id) == '438298127225847810':
         with open('prefix.json', 'r') as f:
             prefixes = json.load(f)
-        await ctx.send(f'```\n{prefixes}\n```')
+    for chunk in chunks(prefixes, 1000):
+        await ctx.send(f'```\n{chunk}\n```')
     else:
         await ctx.send("Sorry, but you don't have permission to do that.")
 
