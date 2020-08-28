@@ -106,7 +106,7 @@ async def cprefixsu(ctx, arg1, arg2):
             prefixes = json.load(f)
             prefix = prefixes[str(ctx.guild.id)]
 
-        await ctx.send(f'prefixes[{str(arg1)}] is now {str(arg2)}. Verify using `{prefix}prefixjson`.')
+        await ctx.send(f'prefixes[{str(arg1)}] is now `{str(arg2)}`. Verify using `{prefix}prefixjson`.')
     else:
         await ctx.send("Sorry, but you don't have permission to do that.")
 @cprefixsu.error
