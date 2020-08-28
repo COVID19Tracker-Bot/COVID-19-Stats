@@ -75,7 +75,7 @@ async def source(ctx):
 async def getguildcommand(ctx, arg1):
     if str(ctx.message.author.id) == '438298127225847810':
         guild = bot.get_guild(int(arg1))
-        if guild not None:
+        if guild != None:
             await ctx.send(f'Guild name: {str(guild.name)}\nGuild owner: {str(guild.owner)}')
         else:
             await ctx.send('Invalid guild ID!')
