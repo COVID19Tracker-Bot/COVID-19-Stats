@@ -10,6 +10,7 @@ import pandas as pd
 import urllib.request
 import json
 import sys
+import traceback
 import io
 
 def get_prefix(bot, message):
@@ -160,30 +161,48 @@ async def cprefix_error(ctx, error):
 @bot.command(name='exec')
 async def exec_command(ctx, *, arg1):
     if str(ctx.message.author.id) == '438298127225847810':
-        arg1 = arg1[7:-5]
-        print(arg1)
+        arg1 = arg1[6:-4]
         old_stdout = sys.stdout
         new_stdout = io.StringIO()
         sys.stdout = new_stdout
-        exec(arg1)
-        output = new_stdout.getvalue()
-        sys.stdout = old_stdout
-        embed=discord.Embed(title=f'Execute', color=0x7289da)
-        embed.set_author(name="COVID-19 Tracker")
-        embed.add_field(name="Code", value=f'```py\n{str(arg1)}\n```', inline=False)
-        embed.add_field(name="Output", value=f'```\n{str(output)}\n```', inline=False)
-        await ctx.send(embed = embed)
+        try:
+            exec(arg1)
+            output = new_stdout.getvalue()
+            sys.stdout = old_stdout
+        except:
+            x = traceback.format_exc()
+            embed=discord.Embed(title=f'Execute Failed!', color=0xff0000)
+            embed.set_author(name="COVID-19 Tracker")
+            embed.add_field(name="Code", value=f'```py\n{str(arg1)}\n```', inline=False)
+            embed.add_field(name="Output", value=f'```\n{str(x)}\n```', inline=False)
+            await ctx.send(embed = embed)
+        else:
+            embed=discord.Embed(title=f'Execute Success!', color=0x00ff00)
+            embed.set_author(name="COVID-19 Tracker")
+            embed.add_field(name="Code", value=f'```py\n{str(arg1)}\n```', inline=False)
+            embed.add_field(name="Output", value=f'```\n{str(output)}\n```', inline=False)
+            await ctx.send(embed = embed)
     else:
         await ctx.send("Sorry, but you don't have permission to do that.")
 
 @bot.command(name='eval')
 async def eval_command(ctx, *, arg1):
     if str(ctx.message.author.id) == '438298127225847810':
-        embed=discord.Embed(title=f'Evaluate', color=0x7289da)
-        embed.set_author(name="COVID-19 Tracker")
-        embed.add_field(name="Code", value=f'```\n{str(arg1)}\n```', inline=False)
-        embed.add_field(name="Output", value=f'```\n{str(eval(arg1))}\n```', inline=False)
-        await ctx.send(embed = embed)
+        try:
+            evaled = eval(arg1)
+        except:
+            x = traceback.format_exc()
+            embed=discord.Embed(title=f'Evaluate Failed!', color=0xff0000)
+            embed.set_author(name="COVID-19 Tracker")
+            embed.add_field(name="Code", value=f'```\n{str(arg1)}\n```', inline=False)
+            embed.add_field(name="Output", value=f'```\n{str(x)}\n```', inline=False)
+            await ctx.send(embed = embed)
+        else:
+            embed=discord.Embed(title=f'Evaluate Success!', color=0x00ff00)
+            embed.set_author(name="COVID-19 Tracker")
+            embed.add_field(name="Code", value=f'```\n{str(arg1)}\n```', inline=False)
+            embed.add_field(name="Output", value=f'```\n{str(evaled)}\n```', inline=False)
+            await ctx.send(embed = embed)
     else:
         await ctx.send("Sorry, but you don't have permission to do that.")
 
