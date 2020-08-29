@@ -73,7 +73,7 @@ async def on_guild_remove(guild):
     with open('prefix.json', 'w') as f:
         json.dump(prefixes, f, indent=4)
 
-    print(f'I have been removed from {str(guild.name)}. (Owner: {str(guild.owner)}')
+    print(f'I have been removed from {str(guild.name)}. Owner: {str(guild.owner)}')
 
 @bot.command(aliases = ['sourcecode'])
 async def source(ctx):
