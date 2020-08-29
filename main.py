@@ -16,7 +16,6 @@ import io
 def get_prefix(bot, message):
     with open('prefix.json', 'r') as f:
         prefixes = json.load(f)
-
     try:
         return prefixes[str(message.guild.id)]
         prefix = prefixes[str(message.guild.id)]
@@ -55,9 +54,7 @@ async def on_ready():
 async def on_guild_join(guild):
     with open('prefix.json', 'r') as f:
         prefixes = json.load(f)
-
     prefixes[str(guild.id)] = 'c!'
-
     with open('prefix.json', 'w') as f:
         json.dump(prefixes, f, indent=4)
 
@@ -67,9 +64,7 @@ async def on_guild_join(guild):
 async def on_guild_remove(guild):
     with open('prefix.json', 'r') as f:
         prefixes = json.load(f)
-
     prefixes.pop(str(guild.id))
-
     with open('prefix.json', 'w') as f:
         json.dump(prefixes, f, indent=4)
 
@@ -114,16 +109,12 @@ async def cprefixsu(ctx, arg1, arg2):
     if str(ctx.message.author.id) == '438298127225847810':
         with open('prefix.json', 'r') as f:
             prefixes = json.load(f)
-        
         prefixes[str(arg1)] = str(arg2)
-
         with open('prefix.json', 'w') as f:
             json.dump(prefixes, f, indent=4)
-        
         with open('prefix.json', 'r') as f:
             prefixes = json.load(f)
             prefix = prefixes[str(ctx.guild.id)]
-
         await ctx.send(f'`prefixes[{str(arg1)}]` is now `{str(arg2)}`. Verify using `{prefix}prefixjson`.')
     else:
         await ctx.send("Sorry, but you don't have permission to do that.")
@@ -146,12 +137,9 @@ async def cprefix(ctx, arg1):
         raise MissingPermissions(["manage_guild"])
     with open('prefix.json', 'r') as f:
         prefixes = json.load(f)
-
     prefixes[str(ctx.guild.id)] = str(arg1)
-
     with open('prefix.json', 'w') as f:
         json.dump(prefixes, f, indent=4)
-
     await ctx.send(f'''My prefix is now `{str(arg1)}`! Please remember it.''')
 @cprefix.error
 async def cprefix_error(ctx, error):
