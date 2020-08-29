@@ -175,7 +175,8 @@ async def exec_command(ctx, *, arg1):
 
 @bot.command(name='eval')
 async def eval_command(ctx, *, arg1):
-    if str(ctx.message.author.id) == '438298127225847810':
+    whitelist = ['438298127225847810', '571590388461076480', '459260229490704394']
+    if str(ctx.message.author.id) in whitelist:
         try:
             evaled = eval(arg1)
         except:
