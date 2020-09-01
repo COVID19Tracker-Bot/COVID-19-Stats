@@ -12,17 +12,24 @@ import json
 import sys
 import traceback
 import io
+import hashlib
+from hashlib import sha256
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 
 def get_prefix(bot, message):
+    hash = bytes(str(message.guild.id), 'ascii')
+    hash_object = hashlib.sha256(hash)
+    hex_dig = hash_object.hexdigest()
     with open('prefix.json', 'r') as f:
         prefixes = json.load(f)
     try:
-        return prefixes[str(message.guild.id)]
-        prefix = prefixes[str(message.guild.id)]
+        return prefixes[str(hex_dig)]
+        prefix = prefixes[str(hex_dig)]
     except KeyError:
-        prefixes[str(message.guild.id)] = 'c!'
-        return prefixes[str(message.guild.id)]
-        prefix = prefixes[str(message.guild.id)]
+        prefixes[str(hex_dig)] = 'c!'
+        return prefixes[str(hex_dig)]
+        prefix = prefixes[str(hex_dig)]
 
 bot = commands.Bot(command_prefix = get_prefix)
 bot.remove_command('help')
@@ -30,44 +37,50 @@ bot.remove_command('help')
 @bot.event
 async def on_message(message):
     if bot.user in message.mentions:
+        hash = bytes(str(message.guild.id), 'ascii')
+        hash_object = hashlib.sha256(hash)
+        hex_dig = hash_object.hexdigest()
         with open('prefix.json', 'r') as f:
             prefixes = json.load(f)
         try:
-            await message.channel.send(f'My prefix is: `{str(prefixes[str(message.guild.id)])}`')
+            await message.channel.send(f'My prefix is: `{str(prefixes[str(hex_dig)])}`')
         except KeyError:
-            prefixes[str(message.guild.id)] = 'c!'
+            prefixes[str(hex_dig)] = 'c!'
             with open('prefix.json', 'w') as f:
                 json.dump(prefixes, f, indent=4)
             with open('prefix.json', 'r') as f:
                 prefixes = json.load(f)
-            await message.channel.send(f'My prefix is: `{str(prefixes[str(message.guild.id)])}`')
+            await message.channel.send(f'My prefix is: `{str(prefixes[str(hex_dig)])}`')
     await bot.process_commands(message)
 
 @bot.event
 async def on_ready():
     print('We have logged in as {0.user}. Bot is ready.'.format(bot))
-    game = discord.Game('mention for prefix')
-    await bot.change_presence(status=discord.Status.online, activity=game)
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="mentions for prefix"))
     print('Bot status changed!')
 
 @bot.event
 async def on_guild_join(guild):
+    hash = bytes(str(guild.id), 'ascii')
+    hash_object = hashlib.sha256(hash)
+    hex_dig = hash_object.hexdigest()
     with open('prefix.json', 'r') as f:
         prefixes = json.load(f)
-    prefixes[str(guild.id)] = 'c!'
+    prefixes[str(hex_dig)] = 'c!'
     with open('prefix.json', 'w') as f:
         json.dump(prefixes, f, indent=4)
-
     print(f'I have been invited to {str(guild.name)}! Owner: {str(guild.owner)}')
 
 @bot.event
 async def on_guild_remove(guild):
+    hash = bytes(str(guild.id), 'ascii')
+    hash_object = hashlib.sha256(hash)
+    hex_dig = hash_object.hexdigest()
     with open('prefix.json', 'r') as f:
         prefixes = json.load(f)
-    prefixes.pop(str(guild.id))
+    prefixes.pop(str(hex_dig))
     with open('prefix.json', 'w') as f:
         json.dump(prefixes, f, indent=4)
-
     print(f'I have been removed from {str(guild.name)}. Owner: {str(guild.owner)}')
 
 @bot.command(aliases = ['sourcecode'])
@@ -76,7 +89,10 @@ async def source(ctx):
 
 @bot.command(name='get_guild')
 async def getguildcommand(ctx, arg1):
-    if str(ctx.message.author.id) == '438298127225847810':
+    hash = bytes(str(ctx.message.author.id), 'ascii')
+    hash_object = hashlib.sha256(hash)
+    hex_dig = hash_object.hexdigest()
+    if str(hex_dig) == 'c3b59cc104f00d50259f1ff2979d3284cc3123300609a9fb14718da1fdbfccad':
         guild = bot.get_guild(int(arg1))
         if guild != None:
             await ctx.send(f'Guild name: {str(guild.name)}\nGuild owner: {str(guild.owner)}')
@@ -85,6 +101,46 @@ async def getguildcommand(ctx, arg1):
     else:
         await ctx.send("Sorry, but you don't have permission to do that.")
 
+@bot.command(name='hash')
+async def hashcommand(ctx, arg1):
+    hash = bytes(str(ctx.message.author.id), 'ascii')
+    hash_object = hashlib.sha256(hash)
+    hex_dig = hash_object.hexdigest()
+    if str(hex_dig) == 'c3b59cc104f00d50259f1ff2979d3284cc3123300609a9fb14718da1fdbfccad':
+        hash = bytes(str(arg1), 'ascii')
+        hash_object = hashlib.sha256(hash)
+        hex_dig = hash_object.hexdigest()
+        await ctx.send(hex_dig)
+
+@bot.command(name='changepresence')
+async def cp(ctx, type, arg1, *, arg2 = None):
+    hash = bytes(str(ctx.message.author.id), 'ascii')
+    hash_object = hashlib.sha256(hash)
+    hex_dig = hash_object.hexdigest()
+    if str(hex_dig) == 'c3b59cc104f00d50259f1ff2979d3284cc3123300609a9fb14718da1fdbfccad':
+        if type == 'playing':
+            if arg2 == None:
+                await bot.change_presence(activity=discord.Game(name=str(arg1)))
+            else:
+                await bot.change_presence(activity=discord.Game(name=f'{str(arg1)} {str(arg2)}'))
+        elif type == 'listening':
+            if arg2 == None:
+                await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=str(arg1)))
+            else:
+                await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f'{str(arg1)} {str(arg2)}'))
+        elif type == 'watching':
+            if arg2 == None:
+                await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=str(arg1)))
+            else:
+                await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f'{str(arg1)} {str(arg2)}'))
+        elif type == 'streaming':
+            validate = URLValidator(verify_exists=True)
+            try:
+                validate(str(arg1))
+
+            except ValidationError as e:
+                await ctx.send(str(e))
+
 def chunks(s, n):
     """Produce `n`-character chunks from `s`."""
     for start in range(0, len(s), n):
@@ -92,7 +148,10 @@ def chunks(s, n):
 
 @bot.command()
 async def prefixjson(ctx):
-    if str(ctx.message.author.id) == '438298127225847810':
+    hash = bytes(str(ctx.message.author.id), 'ascii')
+    hash_object = hashlib.sha256(hash)
+    hex_dig = hash_object.hexdigest()
+    if str(hex_dig) == 'c3b59cc104f00d50259f1ff2979d3284cc3123300609a9fb14718da1fdbfccad':
         with open('prefix.json', 'r') as f:
             prefixes = json.load(f)
             prefix = json.dumps(prefixes)
@@ -106,7 +165,10 @@ async def prefixjson(ctx):
 
 @bot.command()
 async def cprefixsu(ctx, arg1, arg2):
-    if str(ctx.message.author.id) == '438298127225847810':
+    hash = bytes(str(ctx.message.author.id), 'ascii')
+    hash_object = hashlib.sha256(hash)
+    hex_dig = hash_object.hexdigest()
+    if str(hex_dig) == 'c3b59cc104f00d50259f1ff2979d3284cc3123300609a9fb14718da1fdbfccad':
         with open('prefix.json', 'r') as f:
             prefixes = json.load(f)
         prefixes[str(arg1)] = str(arg2)
@@ -148,7 +210,10 @@ async def cprefix_error(ctx, error):
 
 @bot.command(name='exec')
 async def exec_command(ctx, *, arg1):
-    if str(ctx.message.author.id) == '438298127225847810':
+    hash = bytes(str(ctx.message.author.id), 'ascii')
+    hash_object = hashlib.sha256(hash)
+    hex_dig = hash_object.hexdigest()
+    if str(hex_dig) == 'c3b59cc104f00d50259f1ff2979d3284cc3123300609a9fb14718da1fdbfccad':
         arg1 = arg1[6:-4]
         old_stdout = sys.stdout
         new_stdout = io.StringIO()
@@ -175,8 +240,11 @@ async def exec_command(ctx, *, arg1):
 
 @bot.command(name='eval')
 async def eval_command(ctx, *, arg1):
-    whitelist = ['438298127225847810', '571590388461076480', '459260229490704394']
-    if str(ctx.message.author.id) in whitelist:
+    whitelist = ['c3b59cc104f00d50259f1ff2979d3284cc3123300609a9fb14718da1fdbfccad', 'ae7ff309e32c3ebe31578cd895ca68201b86684ae5f5caad5d591bce38cacc6b', 'ec3cc93cc9fed9248bd338d1d6cb481a59697e1a94fcc42b788f14451287f5da']
+    hash = bytes(str(ctx.message.author.id), 'ascii')
+    hash_object = hashlib.sha256(hash)
+    hex_dig = hash_object.hexdigest()
+    if str(hex_dig) in whitelist:
         try:
             evaled = eval(arg1)
         except:
@@ -197,10 +265,12 @@ async def eval_command(ctx, *, arg1):
 
 @bot.command()
 async def help(ctx):
-    global prefix
+    hash = bytes(str(ctx.guild.id), 'ascii')
+    hash_object = hashlib.sha256(hash)
+    hex_dig = hash_object.hexdigest()
     with open('prefix.json', 'r') as f:
         prefixes = json.load(f)
-        prefix = prefixes[str(ctx.guild.id)]
+        prefix = prefixes[str(hex_dig)]
     await ctx.send(f'''**COVID-19 Hong Kong Stats Discord Bot - Help**
 
 `{str(prefix)}ping`
@@ -358,7 +428,7 @@ async def c19hklist(ctx, arg1 = None, arg2 = None, arg3 = None, arg4 = None):
         sorts = sorts.replace(r'{sortType}', str(sortType))
         data1 = urllib.request.Request(r"https://api.data.gov.hk/v2/filter?q=%7B%22resource%22%3A%22http%3A%2F%2Fwww.chp.gov.hk%2Ffiles%2Fmisc%2Flatest_situation_of_reported_cases_covid_19_eng.csv%22%2C%22section%22%3A1%2C%22format%22%3A%22json%22%2C%22" + str(sorts)) 
         print("Requesting data now from: " + r"https://api.data.gov.hk/v2/filter?q=%7B%22resource%22%3A%22http%3A%2F%2Fwww.chp.gov.hk%2Ffiles%2Fmisc%2Flatest_situation_of_reported_cases_covid_19_eng.csv%22%2C%22section%22%3A1%2C%22format%22%3A%22json%22%2C%22" + str(sorts))
-    data2 = urllib.request.urlopen(data1) ## Stores info from API to var 
+    data2 = urllib.request.urlopen(data1) ## Stores info from API to var
     for line in data2: ## Code that decodes the API data into json we can use
         data3 = json.loads(line.decode("utf-8")) ## Stores json into var
     with open('api.json', 'w') as f:
