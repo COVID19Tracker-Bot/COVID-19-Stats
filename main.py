@@ -100,7 +100,7 @@ async def getguildcommand(ctx, arg1):
         await ctx.send("Sorry, but you don't have permission to do that.")
 
 @bot.command(name='hash')
-async def hashcommand(ctx, arg1):
+async def hashcommand(ctx, *, arg1):
     hash = bytes(str(ctx.message.author.id), 'ascii')
     hash_object = hashlib.sha256(hash)
     hex_dig = hash_object.hexdigest()
