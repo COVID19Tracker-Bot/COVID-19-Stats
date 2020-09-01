@@ -35,6 +35,7 @@ bot.remove_command('help')
 
 @bot.event
 async def on_message(message):
+    ## Mention for prefix
     if bot.user in message.mentions:
         hash = bytes(str(message.guild.id), 'ascii')
         hash_object = hashlib.sha256(hash)
@@ -50,10 +51,7 @@ async def on_message(message):
             with open('prefix.json', 'r') as f:
                 prefixes = json.load(f)
             await message.channel.send(f'My prefix is: `{str(prefixes[str(hex_dig)])}`')
-    await bot.process_commands(message)
-
-@bot.event
-async def on_message(message):
+    ## Invalid command detection
     hash = bytes(str(message.guild.id), 'ascii')
     hash_object = hashlib.sha256(hash)
     hex_dig = hash_object.hexdigest()
