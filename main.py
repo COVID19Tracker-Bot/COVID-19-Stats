@@ -14,8 +14,6 @@ import traceback
 import io
 import hashlib
 from hashlib import sha256
-from django.core.validators import URLValidator
-from django.core.exceptions import ValidationError
 
 def get_prefix(bot, message):
     hash = bytes(str(message.guild.id), 'ascii')
@@ -118,28 +116,30 @@ async def cp(ctx, type, arg1, *, arg2 = None):
     hash_object = hashlib.sha256(hash)
     hex_dig = hash_object.hexdigest()
     if str(hex_dig) == 'c3b59cc104f00d50259f1ff2979d3284cc3123300609a9fb14718da1fdbfccad':
-        if type == 'playing':
-            if arg2 == None:
-                await bot.change_presence(activity=discord.Game(name=str(arg1)))
-            else:
-                await bot.change_presence(activity=discord.Game(name=f'{str(arg1)} {str(arg2)}'))
-        elif type == 'listening':
-            if arg2 == None:
-                await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=str(arg1)))
-            else:
-                await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f'{str(arg1)} {str(arg2)}'))
-        elif type == 'watching':
-            if arg2 == None:
-                await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=str(arg1)))
-            else:
-                await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f'{str(arg1)} {str(arg2)}'))
-        elif type == 'streaming':
-            validate = URLValidator(verify_exists=True)
-            try:
-                validate(str(arg1))
-
-            except ValidationError as e:
-                await ctx.send(str(e))
+        try:
+            if type == 'playing':
+                if arg2 == None:
+                    await bot.change_presence(activity=discord.Game(name=str(arg1)))
+                else:
+                    await bot.change_presence(activity=discord.Game(name=f'{str(arg1)} {str(arg2)}'))
+            elif type == 'listening':
+                if arg2 == None:
+                    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=str(arg1)))
+                else:
+                    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f'{str(arg1)} {str(arg2)}'))
+            elif type == 'watching':
+                if arg2 == None:
+                    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=str(arg1)))
+                else:
+                    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f'{str(arg1)} {str(arg2)}'))
+            elif type == 'streaming':
+                if arg2 != None:
+                    await bot.change_presence(activity=discord.Streaming(name=arg2, url=arg1))
+                else:
+                    await ctx.send('`arg2` is required for type streaming!')
+        except:
+            x = traceback.format_exc()
+            await ctx.send(f'An error has occured!\n```\n{str(x)}\n```')
 
 def chunks(s, n):
     """Produce `n`-character chunks from `s`."""
