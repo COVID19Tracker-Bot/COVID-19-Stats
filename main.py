@@ -18,10 +18,6 @@ import hashlib
 from hashlib import sha256
 
 token = os.environ.get("TOKEN")
-while True:
-    print(token)
-    print(str(token))
-    print(type(token))
 
 def get_prefix(bot, message):
     hash = bytes(str(message.guild.id), 'ascii')
