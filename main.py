@@ -16,6 +16,8 @@ import io
 import hashlib
 from hashlib import sha256
 
+token = os.environ.get("TOKEN")
+
 def get_prefix(bot, message):
     hash = bytes(str(message.guild.id), 'ascii')
     hash_object = hashlib.sha256(hash)
@@ -744,4 +746,4 @@ async def c19hkcd(ctx, arg1 = None):
         embed.add_field(name="Case status", value=str(data3[0]['Confirmed/probable']), inline=True)
         await ctx.send(embed = embed)
 
-bot.run('NzQ0ODQxMDcwNjIxMzYwMTY5.XzpFTQ.YZqCUUcuCV18LyplHs9XjINfe2c')
+bot.run(token)
