@@ -220,7 +220,7 @@ async def prefixjson(ctx):
         await ctx.send("Sorry, but you don't have permission to do that.")
 
 @bot.command()
-async def cprefixsu(ctx, arg1, arg2):
+async def cprefixsu(ctx, arg1, arg2 = None):
     hash = bytes(str(ctx.message.author.id), 'ascii')
     hash_object = hashlib.sha256(hash)
     hex_dig = hash_object.hexdigest()
@@ -231,15 +231,26 @@ async def cprefixsu(ctx, arg1, arg2):
     hash_object = hashlib.sha256(hash)
     hex_dig3 = hash_object.hexdigest()
     if str(hex_dig) == str(hex_dig2):
-        with open('prefix.json', 'r') as f:
-            prefixes = json.load(f)
-        prefixes[str(arg1)] = str(arg2)
-        with open('prefix.json', 'w') as f:
-            json.dump(prefixes, f, indent=4)
-        with open('prefix.json', 'r') as f:
-            prefixes = json.load(f)
-            prefix = prefixes[str(hex_dig3)]
-        await ctx.send(f'''`prefixes[{str(arg1)}]` is now `{str(arg2)}`. Verify using `{prefix}prefixjson`.''')
+        if arg2 != None:
+            with open('prefix.json', 'r') as f:
+                prefixes = json.load(f)
+            prefixes[str(arg1)] = str(arg2)
+            with open('prefix.json', 'w') as f:
+                json.dump(prefixes, f, indent=4)
+            with open('prefix.json', 'r') as f:
+                prefixes = json.load(f)
+                prefix = prefixes[str(hex_dig3)]
+            await ctx.send(f'''`prefixes[{str(arg1)}]` is now `{str(arg2)}`. Verify using `{prefix}prefixjson`.''')
+        elif arg2 == None:
+            with open('prefix.json', 'r') as f:
+                prefixes = json.load(f)
+            prefixes.pop(str(arg1))
+            with open('prefix.json', 'w') as f:
+                json.dump(prefixes, f, indent=4)
+            with open('prefix.json', 'r') as f:
+                prefixes = json.load(f)
+                prefix = prefixes[str(hex_dig3)]
+            await ctx.send(f'''`prefixes[{str(arg1)}]` has been removed. Verify using `{prefix}prefixjson`.''')
     else:
         await ctx.send("Sorry, but you don't have permission to do that.")
 @cprefixsu.error
