@@ -91,7 +91,7 @@ async def on_message(message):
             json.dump(prefixes, f, indent=4)
         with open('prefix.json', 'r') as f:
             prefixes = json.load(f)
-        print(f'Set prefix for guild id {message.guild.id} (hashed object: {hex_dig}) to `{str(prefixes[str(hex_dig)])}`')
+        print(f'Set prefix for guild id {message.guild.id} (hashed object: {hex_dig}) to "{str(prefixes[str(hex_dig)])}""')
     await bot.process_commands(message)
 
 @bot.event
@@ -227,6 +227,9 @@ async def cprefixsu(ctx, arg1, arg2):
     hash = bytes(str(owner), 'ascii')
     hash_object = hashlib.sha256(hash)
     hex_dig2 = hash_object.hexdigest()
+    hash = bytes(str(ctx.guild.id), 'ascii')
+    hash_object = hashlib.sha256(hash)
+    hex_dig3 = hash_object.hexdigest()
     if str(hex_dig) == str(hex_dig2):
         with open('prefix.json', 'r') as f:
             prefixes = json.load(f)
@@ -235,8 +238,8 @@ async def cprefixsu(ctx, arg1, arg2):
             json.dump(prefixes, f, indent=4)
         with open('prefix.json', 'r') as f:
             prefixes = json.load(f)
-            prefix = prefixes[str(ctx.guild.id)]
-        await ctx.send(f'`prefixes[{str(arg1)}]` is now `{str(arg2)}`. Verify using `{prefix}prefixjson`.')
+            prefix = prefixes[str(hex_dig3)]
+        await ctx.send(f'''`prefixes[{str(arg1)}]` is now `{str(arg2)}`. Verify using `{prefix}prefixjson`.''')
     else:
         await ctx.send("Sorry, but you don't have permission to do that.")
 @cprefixsu.error
