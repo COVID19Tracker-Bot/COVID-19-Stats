@@ -91,7 +91,7 @@ async def on_message(message):
             json.dump(prefixes, f, indent=4)
         with open('prefix.json', 'r') as f:
             prefixes = json.load(f)
-        print(f'Set prefix for guild id {message.guild.id} (hashed object: {hex_dig}) to "{str(prefixes[str(hex_dig)])}""')
+        print(f'Set prefix for guild id {message.guild.id} (hashed object: {hex_dig}) to "{str(prefixes[str(hex_dig)])}')
     await bot.process_commands(message)
 
 @bot.event
