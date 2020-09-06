@@ -17,7 +17,10 @@ import io
 import hashlib
 from hashlib import sha256
 
+## Define your TOKEN environment variable for the bot to work!
 token = os.environ.get("TOKEN")
+## Define your OWNER environment variable for the bot to work and to recognize the bot owner!
+owner = os.environ.get("OWNER")
 
 def get_prefix(bot, message):
     hash = bytes(str(message.guild.id), 'ascii')
@@ -28,12 +31,14 @@ def get_prefix(bot, message):
     try:
         return prefixes[str(hex_dig)]
         prefix = prefixes[str(hex_dig)]
+    ## Prefix not found
     except KeyError:
         prefixes[str(hex_dig)] = 'c!'
         return prefixes[str(hex_dig)]
         prefix = prefixes[str(hex_dig)]
 
 bot = commands.Bot(command_prefix = get_prefix)
+## Removes the help command in order for custom help command to work
 bot.remove_command('help')
 
 @bot.event
@@ -128,7 +133,10 @@ async def getguildcommand(ctx, arg1):
     hash = bytes(str(ctx.message.author.id), 'ascii')
     hash_object = hashlib.sha256(hash)
     hex_dig = hash_object.hexdigest()
-    if str(hex_dig) == 'c3b59cc104f00d50259f1ff2979d3284cc3123300609a9fb14718da1fdbfccad':
+    hash = bytes(str(owner), 'ascii')
+    hash_object = hashlib.sha256(hash)
+    hex_dig2 = hash_object.hexdigest()
+    if str(hex_dig) == str(hex_dig2):
         guild = bot.get_guild(int(arg1))
         if guild != None:
             await ctx.send(f'Guild name: {str(guild.name)}\nGuild owner: {str(guild.owner)}')
@@ -142,7 +150,10 @@ async def hashcommand(ctx, *, arg1):
     hash = bytes(str(ctx.message.author.id), 'ascii')
     hash_object = hashlib.sha256(hash)
     hex_dig = hash_object.hexdigest()
-    if str(hex_dig) == 'c3b59cc104f00d50259f1ff2979d3284cc3123300609a9fb14718da1fdbfccad':
+    hash = bytes(str(owner), 'ascii')
+    hash_object = hashlib.sha256(hash)
+    hex_dig2 = hash_object.hexdigest()
+    if str(hex_dig) == str(hex_dig2):
         hash = bytes(str(arg1), 'ascii')
         hash_object = hashlib.sha256(hash)
         hex_dig = hash_object.hexdigest()
@@ -153,7 +164,10 @@ async def cp(ctx, type, arg1, *, arg2 = None):
     hash = bytes(str(ctx.message.author.id), 'ascii')
     hash_object = hashlib.sha256(hash)
     hex_dig = hash_object.hexdigest()
-    if str(hex_dig) == 'c3b59cc104f00d50259f1ff2979d3284cc3123300609a9fb14718da1fdbfccad':
+    hash = bytes(str(owner), 'ascii')
+    hash_object = hashlib.sha256(hash)
+    hex_dig2 = hash_object.hexdigest()
+    if str(hex_dig) == str(hex_dig2):
         try:
             if type == 'playing':
                 if arg2 == None:
@@ -185,11 +199,15 @@ def chunks(s, n):
         yield s[start:start+n]
 
 @bot.command()
+## Shows the contents of the prefix.json file, for bot owner only.
 async def prefixjson(ctx):
     hash = bytes(str(ctx.message.author.id), 'ascii')
     hash_object = hashlib.sha256(hash)
     hex_dig = hash_object.hexdigest()
-    if str(hex_dig) == 'c3b59cc104f00d50259f1ff2979d3284cc3123300609a9fb14718da1fdbfccad':
+    hash = bytes(str(owner), 'ascii')
+    hash_object = hashlib.sha256(hash)
+    hex_dig2 = hash_object.hexdigest()
+    if str(hex_dig) == str(hex_dig2):
         with open('prefix.json', 'r') as f:
             prefixes = json.load(f)
             prefix = json.dumps(prefixes)
@@ -206,7 +224,10 @@ async def cprefixsu(ctx, arg1, arg2):
     hash = bytes(str(ctx.message.author.id), 'ascii')
     hash_object = hashlib.sha256(hash)
     hex_dig = hash_object.hexdigest()
-    if str(hex_dig) == 'c3b59cc104f00d50259f1ff2979d3284cc3123300609a9fb14718da1fdbfccad':
+    hash = bytes(str(owner), 'ascii')
+    hash_object = hashlib.sha256(hash)
+    hex_dig2 = hash_object.hexdigest()
+    if str(hex_dig) == str(hex_dig2):
         with open('prefix.json', 'r') as f:
             prefixes = json.load(f)
         prefixes[str(arg1)] = str(arg2)
@@ -251,7 +272,10 @@ async def exec_command(ctx, *, arg1):
     hash = bytes(str(ctx.message.author.id), 'ascii')
     hash_object = hashlib.sha256(hash)
     hex_dig = hash_object.hexdigest()
-    if str(hex_dig) == 'c3b59cc104f00d50259f1ff2979d3284cc3123300609a9fb14718da1fdbfccad':
+    hash = bytes(str(owner), 'ascii')
+    hash_object = hashlib.sha256(hash)
+    hex_dig2 = hash_object.hexdigest()
+    if str(hex_dig) == str(hex_dig2):
         arg1 = arg1[6:-4]
         old_stdout = sys.stdout
         new_stdout = io.StringIO()
@@ -278,6 +302,7 @@ async def exec_command(ctx, *, arg1):
 
 @bot.command(name='eval')
 async def eval_command(ctx, *, arg1):
+    ## Hash using SHA256, the User IDs of the users you want to whitelist. Whitelisted users will be able to use the evaluate command.
     whitelist = ['c3b59cc104f00d50259f1ff2979d3284cc3123300609a9fb14718da1fdbfccad', 'ae7ff309e32c3ebe31578cd895ca68201b86684ae5f5caad5d591bce38cacc6b', 'ec3cc93cc9fed9248bd338d1d6cb481a59697e1a94fcc42b788f14451287f5da']
     hash = bytes(str(ctx.message.author.id), 'ascii')
     hash_object = hashlib.sha256(hash)
