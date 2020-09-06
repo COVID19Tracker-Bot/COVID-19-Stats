@@ -122,7 +122,7 @@ async def on_guild_remove(guild):
 
 @bot.command(aliases = ['sourcecode'])
 async def source(ctx):
-    await ctx.send('https://gist.github.com/YouTubeATP/6d35c88c44f48ab34cc1b85cfd2e1023')
+    await ctx.send('https://github.com/COVID19Tracker-Bot/COVID-19-Stats')
 
 @bot.command(name='get_guild')
 async def getguildcommand(ctx, arg1):
