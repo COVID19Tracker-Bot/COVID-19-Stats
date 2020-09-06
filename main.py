@@ -79,7 +79,6 @@ async def on_message(message):
                     'source'
                 ]
                 content = message.content.replace(f'{str(prefixes[str(hex_dig)])}', '')
-                print(content)
                 await ctx.send(f'This is an invalid command! Did you mean `{str(prefixes[str(hex_dig)])}{str(difflib.get_close_matches(content, commands, n=1)[0])}`?\nUse `{str(prefixes[str(hex_dig)])}help` for a list of commands.')
     except KeyError:
         prefixes[str(hex_dig)] = 'c!'
