@@ -16,11 +16,11 @@ class Misc(commands.Cog):
 
     @commands.command()
     async def ping(self, ctx):
-        await ctx.send(f':ping_pong: Pong! The latency is **{round(bot.latency * 1000)}ms**.')
+        await ctx.send(f':ping_pong: Pong! The latency is **{round(self.bot.latency * 1000)}ms**.')
 
     @commands.command()
     async def pong(self, ctx):
-        await ctx.send(f':ping_pong: Ping! The latency is **{round(bot.latency * 1000)}ms**.')
+        await ctx.send(f':ping_pong: Ping! The latency is **{round(self.bot.latency * 1000)}ms**.')
 
     @commands.command()
     async def help(self, ctx):
