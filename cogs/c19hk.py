@@ -21,6 +21,7 @@ class COVID19(commands.Cog):
     async def on_ready(self):
         try:
             f = open('api.json', 'x')
+            print('api.json created!')
             f.write("{}")
             f.close
         except:
