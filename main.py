@@ -1,21 +1,9 @@
 import discord
 from discord.ext import commands
-from discord.ext.commands import has_permissions
-import datetime
-from datetime import datetime, date, timedelta
-import pytz
-import tabulate
-from tabulate import tabulate
-import pandas as pd
-import urllib.request
-import json
-import sys
-import os
-import traceback
-import difflib
-import io
 import hashlib
 from hashlib import sha256
+import json
+import os
 
 ## Define your TOKEN environment variable for the bot to work!
 token = os.environ.get("TOKEN")
