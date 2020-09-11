@@ -15,6 +15,17 @@ class COVID19(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    ## Creates a api.json file to dump to.
+    ## This file is essentially useless, but meh.
+    @commands.Cog.listener()
+    async def on_ready(self):
+        try:
+            f = open('api.json', 'x')
+            f.write("{}")
+            f.close
+        except:
+            pass
+
     ## Processes data from data.gov.hk API 'Latest situation of reported cases of COVID-19 in Hong Kong (English)' only.
     @commands.command(aliases = ['COVID-19hklist', 'COVID19hklist', 'covid19hklist', 'covid-19hklist', 'C19hklist', 'COVID-19hkl', 'COVID19hkl', 'covid19hkl', 'covid-19hkl', 'C19hkl', 'c19hkl'])
     ## arg1: Data type
