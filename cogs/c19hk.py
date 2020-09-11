@@ -1,4 +1,4 @@
-## Module for COVID-19 related commands.
+## Module for COVID-19 info of Hong Kong-related commands.
 
 import discord
 from discord.ext import commands
