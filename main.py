@@ -69,6 +69,21 @@ async def extunload(ctx, cog):
         await ctx.send("Sorry, but you don't have permission to do that.")
 
 @bot.command()
+async def extreload(ctx, cog):
+    hash = bytes(str(ctx.message.author.id), 'ascii')
+    hash_object = hashlib.sha256(hash)
+    hex_dig = hash_object.hexdigest()
+    hash = bytes(str(owner), 'ascii')
+    hash_object = hashlib.sha256(hash)
+    hex_dig2 = hash_object.hexdigest()
+    if hex_dig == hex_dig2:
+        bot.unload_extension(f'cogs.{cog}')
+        bot.load_extension(f'cogs.{cog}')
+        await ctx.send(f'Reloaded extension `{cog}`!')
+    else:
+        await ctx.send("Sorry, but you don't have permission to do that.")
+
+@bot.command()
 async def extlist(ctx):
     hash = bytes(str(ctx.message.author.id), 'ascii')
     hash_object = hashlib.sha256(hash)
