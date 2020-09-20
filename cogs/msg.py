@@ -46,7 +46,7 @@ class MessageHandler(commands.Cog):
                         'cprefix',
                         'ping',
                         'help',
-                        'c19hkd'
+                        'c19hkd',
                         'c19hkcd',
                         'c19hklist',
                         'c19hkclist',
