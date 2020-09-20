@@ -68,7 +68,7 @@ class Owner(commands.Cog):
                 x = traceback.format_exc()
                 await ctx.send(f'An error has occured!\n```\n{str(x)}\n```')
 
-    def chunks(s, n):
+    def chunks(self, s, n):
         """Produce `n`-character chunks from `s`."""
         for start in range(0, len(s), n):
             yield s[start:start+n]
@@ -88,7 +88,7 @@ class Owner(commands.Cog):
                 prefixes = json.load(f)
                 prefix = json.dumps(prefixes)
             try:
-                for chunk in chunks(prefix, 1000):
+                for chunk in self.chunks(prefix, 1000):
                     await ctx.send(f'```\n{chunk}\n```')
             except TypeError:
                 await ctx.send(f'```\n{prefix}\n```')
