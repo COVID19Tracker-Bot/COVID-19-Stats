@@ -13,11 +13,14 @@ class Admins(commands.Cog):
 
     @commands.command(aliases = ['changeprefix'])
     async def cprefix(self, ctx, arg1):
+        hash = bytes(str(ctx.guild.id), 'ascii')
+        hash_object = hashlib.sha256(hash)
+        hex_dig = hash_object.hexdigest()
         if not await has_permissions(manage_guild=True).predicate(ctx):
             raise MissingPermissions(["manage_guild"])
         with open('prefix.json', 'r') as f:
             prefixes = json.load(f)
-        prefixes[str(ctx.guild.id)] = str(arg1)
+        prefixes[str(hex_dig)] = str(arg1)
         with open('prefix.json', 'w') as f:
             json.dump(prefixes, f, indent=4)
         await ctx.send(f'''My prefix is now `{str(arg1)}`! Please remember it.''')
